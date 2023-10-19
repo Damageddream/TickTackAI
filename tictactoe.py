@@ -19,11 +19,18 @@ def initial_state():
 
 
 def player(board):
-    """
-    Returns player who has the next turn on a board.
-    """
-    raise NotImplementedError
-
+    x = 0
+    o = 0
+    for row in board:
+        for mark in row:
+            if mark == "X":
+                x += 1
+            elif mark == "Y":
+                o += 1
+    if x > o or x == 0:
+        return "X"
+    else:
+        return "Y"
 
 def actions(board):
     """
