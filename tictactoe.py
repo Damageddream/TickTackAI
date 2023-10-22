@@ -123,7 +123,33 @@ def utility(board):
 
 
 def minimax(board):
-    """
-    Returns the optimal action for the current player on the board.
-    """
-    raise NotImplementedError
+    
+    is_terminal = terminal(board)
+    if(is_terminal):
+        return None
+    def max_value(board_max):
+        if(terminal(board_max)):
+            return utility(board_max)
+        v = -2
+        actions = actions(board_max)
+        for action in actions(board_max):
+            v = max(v, min_value(result(board_max, action)))
+        return v
+    def min_value(board_min):
+        if(terminal(board_min)):
+            return utility(board_min)
+        v = 2
+        actions = actions(board_min)
+        for action in actions(board_min):
+            v = min(v, max_value(result(board_min, action)))
+        return v
+
+
+
+    actions = actions(board)
+    for action in actions:
+        new_board = result(board, action)
+        if(terminal(new_board)):
+            
+
+    
