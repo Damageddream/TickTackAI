@@ -50,10 +50,10 @@ def result(board, action):
     
     check_player = player(board)
     if not isinstance(action, tuple) or len(action) != 2:
-        raise NameError('valid action')
+        raise NameError('invalid action')
     for mark in action:
         if not isinstance(mark,int):
-           raise NameError('valid action') 
+           raise NameError('invalid action') 
     board_copy = copy.deepcopy(board)
     board_copy[action[0]][action[1]] = check_player
     return board_copy
@@ -124,45 +124,40 @@ def utility(board):
 
 def minimax(board):
     
+        
     is_terminal = terminal(board)
     if(is_terminal):
         return None
-    def max_value(board_max):
-        if(terminal(board_max)):
-            return utility(board_max)
-        v = -2
-        for action in actions(board_max):
-            v = max(v, min_value(result(board_max, action)))
-        return v
-    def min_value(board_min):
-        if(terminal(board_min)):
-            return utility(board_min)
-        v = 2
-        for action in actions(board_min):
-            v = min(v, max_value(result(board_min, action)))
-        return v
 
-    all_actions = actions(board)
-    player_turn = player(board)
-
-    best_action_max = -2
-    best_action_min = 2
-    return_action = [1]
-
-
-    for action in all_actions:
-        if(player_turn == X):
-            if(max_value(board) > best_action_max):
-                return_action[0] = action
-        if(player_turn == O):
-            if(min_value(board) < best_action_min):
-                return_action[0] = action
-                
-    return action
-                
-
-        
+    def find_value(board_state):
+        if (terminal(board_state)):
+            return utility(board_state)
             
-
+        if(player(board_state) == X):
+            v = -2
+            for action in actions(board_state):
+                v=max(v,find_value(result(board_state,action)))
+            return v
+        if(player(board_state) == O):
+            v = 2
+            for action in actions(board_state):
+                v=min(v, find_value(result(board_state,action)))
+            return v
     
-        
+    max_action = [-2]
+    min_action = [2]
+    best_action = [1]
+    
+    for action in actions(board):
+        if(player(board) == X):
+            value = find_value(result(board, action))
+            if(max_action[0] < value):
+                max_action[0] = value
+                best_action[0] = action
+        if(player(board) == O):
+            value = find_value(result(board, action))
+            print(value)
+            if(min_action[0] > value):
+                min_action[0] = value
+                best_action[0] = action      
+    return best_action[0]
